@@ -6,11 +6,14 @@ client: bs.Client()
 
 get '/', ->
   this.contentType('html')
+  self: this
   client.use('polywin').onSuccess (data) ->
     id: Date.now()
     client.put(JSON.stringify({'id': id, 'message': 'lol'})).onSuccess (data) ->
-      client.watch("response_${id}").onSuccess (data) ->
-        sys.puts data
-  '<h1>Welcome To Express</h1>'
+      sys.puts "Listening on tube polywin_response_${id}"
+      client.watch("polywin_response_${id}").onSuccess (data) ->
+        client.reserve().onSuccess (response) ->
+          sys.puts response.data
+          self.respond(200, "<h1>${response.data}</h1>")
 
 run()
