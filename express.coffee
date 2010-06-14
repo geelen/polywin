@@ -9,7 +9,7 @@ get '/', ->
   self: this
   client.use('polywin').onSuccess (data) ->
     id: Date.now()
-    client.put(JSON.stringify({'id': id, 'message': 'lol'})).onSuccess (data) ->
+    client.put(JSON.stringify({'id': id, 'message': 'list'})).onSuccess (data) ->
       sys.puts "Listening on tube polywin_response_${id}"
       client.watch("polywin_response_${id}").onSuccess (data) ->
         client.reserve().onSuccess (response) ->
